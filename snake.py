@@ -16,14 +16,62 @@ class Snake:
     def changeDirectionTo(self,MOVE):
         if MOVE == 'RIGHT' and self.direction != "LEFT":
             self.direction = 'RIGHT'
+            return False
         elif MOVE == 'LEFT' and self.direction != "RIGHT":
             self.direction = 'LEFT'
+            return False
         elif MOVE == 'UP' and self.direction != "DOWN":
             self.direction = 'UP'
+            return False
         elif MOVE == 'DOWN' and self.direction != "UP":
             self.direction = 'DOWN' 
-    
+            return False
+        
+        return True
+
+    def randomOrthognoalMove(self):
+        RIGHT = (self.x_pos+1,self.y_pos)
+        LEFT = (self.x_pos-1,self.y_pos)
+        UP = (self.x_pos,self.y_pos+1)
+        DOWN = (self.x_pos,self.y_pos-1)
+
+        if self.direction == "RIGHT":
+            if not self.checkcollision(RIGHT):
+                return RIGHT
+            elif not self.checkcollision(UP):
+                return UP
+            elif not self.checkcollision(DOWN):
+                return DOWN
+
+        elif self.direction == "DOWN":
+            if not self.checkcollision(LEFT):
+                return LEFT
+            elif not self.checkcollision(UP):
+                return UP
+            elif not self.checkcollision(RIGHT):
+                return RIGHT
+
+        elif self.direction == "UP":
+            if not self.checkcollision(LEFT):
+                return LEFT
+            elif not self.checkcollision(RIGHT):
+                return RIGHT
+            elif not self.checkcollision(DOWN):
+                return DOWN
+
+        elif self.direction == "LEFT":
+            if not self.checkcollision(RIGHT):
+                return RIGHT
+            elif not self.checkcollision(UP):
+                return UP
+            elif not self.checkcollision(DOWN):
+                return DOWN
+
+
+
     def CoordinateToDirection(self,nextmove):
+        if (self.x_pos,self.y_pos) == nextmove:
+            return self.direction
         if self.y_pos == nextmove[1]:
             if self.x_pos == nextmove[0]+1:
                 return "LEFT"
@@ -48,6 +96,7 @@ class Snake:
         self.body.append([self.x_pos,self.y_pos])
         if len(self.body) > self.current_size:
             del(self.body[0])
+
     def ate(self,food):
         if food[0] == self.x_pos and food[1] == self.y_pos:
             self.current_size += 1 
